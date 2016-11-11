@@ -3,16 +3,41 @@ class Hawk
     Vector pos = new Vector(0,0);
     Vector vel = new Vector(0,0);
     ArrayList<Bird> flocklist = new ArrayList<Bird>();  
-    
-    Hawk(Vector _pos, Vector _vel, ArrayList<Bird> _flocklist)
+    // this is the hawks target 
+    Vector target = new Vector(0,0);
+    Hawk(Vector _pos, Vector _vel, ArrayList<Bird> _flocklist,Vector _target)
       {
         pos=_pos;
         vel=_vel;
         flocklist=_flocklist;
+        target = _target;
       }
+    void chaseTarget()
+      {
+        target = getFlockCenter();
+        for (Bird bird : flocklist)
+          {
+            if (pos.distance(bird.pos,pos)< 75)
+              {
+                target = bird.pos;
+                break;
+              }
+            else
+              {
+                target = getFlockCenter();  
+              }  
+          }
+        Vector displacement = target;
+        displacement=displacement.subtraction(target,pos);
+        displacement=displacement.scalarmult(.0001,displacement);
+        vel=vel.addition(vel,displacement);
+        limitvel();
+        pos=pos.addition(pos,vel);
+      }  
+      
     // this chases the whole flock  
     void chaseCenter() 
-      {
+      {     
         float size = flocklist.size();
         Vector displacement = getFlockCenter();      
         displacement=displacement.subtraction(displacement,pos);         
@@ -24,7 +49,7 @@ class Hawk
       }
     void limitvel()
       {
-        float limit = 25;
+        float limit = 35;
         float norm = sqrt(pow(vel.x,2)+pow(vel.y,2)); 
         if (norm > limit)
           {

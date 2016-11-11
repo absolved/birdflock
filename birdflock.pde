@@ -2,7 +2,7 @@ Vector a = new Vector (1,1);
 Vector b = new Vector (0,0);
 ArrayList<Bird> flocklist = new ArrayList<Bird>();
 Flock flock = new Flock(200,flocklist);
-Hawk hawk = new Hawk(a,b,flock.flocklist);
+Hawk hawk = new Hawk(a,b,flock.flocklist,a);
 void setup()
 
   {
@@ -29,12 +29,13 @@ void draw()
             //println(bird.pos.x);        
           }
         hawk.display();
-        hawk.chaseCenter();
+        //hawk.chaseCenter();
+        hawk.chaseTarget();
         hawk.scatterFlock();
         flock.moveFlock();  
         flock.boundFlock();    
         hawk.eatBirds();
-        hawk.chaseBirds();
+       // hawk.chaseBirds();
         //hawk.boundHawk();
       }
   }  
