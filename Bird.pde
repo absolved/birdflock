@@ -20,7 +20,7 @@ class Bird
       {
         float flocknum=flocklist.size()-1;
         //this controls the convergence towards the center and adds a random degree of convergence for each bird 
-        float convergence = random(10,25);
+        float convergence = random(10,15);
         Vector center_correct = new Vector(0,0);
         for (Bird boid : flocklist)
           {
