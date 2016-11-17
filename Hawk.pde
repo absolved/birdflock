@@ -12,14 +12,19 @@ class Hawk
         flocklist=_flocklist;
         target = _target;
       }
+    //causes individual birds to flee from the hawk  
+    void birdFlee()
+      {
+        
+      }  
     void chaseTarget()
       {
         target = getFlockCenter();
         for (Bird bird : flocklist)
           {
-            if (pos.distance(bird.pos,pos)< 75)
+            if (pos.distance(bird.pos,pos)< 50)
               {
-                target = bird.pos;
+                target = target.scalarmult(15,bird.pos);
                 break;
               }
             else
@@ -31,7 +36,7 @@ class Hawk
         displacement=displacement.subtraction(target,pos);
         displacement=displacement.scalarmult(.0001,displacement);
         vel=vel.addition(vel,displacement);
-        limitvel();
+       // limitvel();
         pos=pos.addition(pos,vel);
       }  
       
