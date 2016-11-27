@@ -36,8 +36,11 @@ class Flock
     void moveFlock() 
     
       {
-        //this vector will be a random point on the canvas that the birds attempt to move to at each time step  
-        Vector destiny = new Vector (random(1000),random(1000)); 
+        //this vector will be a random point on the canvas that the birds attempt to move to at each time step
+        
+        float x=random(0,2*3.1415);
+        Vector destiny = new Vector (500*sin(x),500*cos(x));
+        println(destiny.x," ", destiny.y);
         for (Bird bird : flocklist)
         
         {
