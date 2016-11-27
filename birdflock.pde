@@ -28,14 +28,14 @@ void draw()
             bird.display();            
             //println(bird.pos.x);        
           }
-        hawk.display();
+        //hawk.display();
         //hawk.chaseCenter();
-        hawk.chaseTarget();
-        hawk.scatterFlock();
+        //hawk.chaseTarget();
+        //hawk.scatterFlock();
         flock.moveFlock();  
         flock.boundFlock();    
-        hawk.eatBirds();
-       // hawk.chaseBirds();
+        //hawk.eatBirds();
+        //hawk.chaseBirds();
         //hawk.boundHawk();
       }
   }  
