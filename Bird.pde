@@ -98,7 +98,7 @@ class Bird
     Vector tri_head()
       {
         //this amounts to solving some quadratic equations
-        float m = (5000*vel.x- pos.y)/(5000*vel.y-pos.x);        
+        float m = (1500*vel.x- pos.y)/(1500*vel.y-pos.x);        
         float a = 1 + (m*m);      
         float b = -2*pos.x*(1+m*m);         
         float c = (pos.x*pos.x)*a-100;        
