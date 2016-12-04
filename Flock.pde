@@ -22,9 +22,10 @@ class Flock
           {
             Vector vel = new Vector(random(-.1,.1),random(-.1,.1));
             Vector pos = new Vector(random(500),random(500));
+            Vector accel = new Vector(0,0);
             float mass = 1;
             int bird_color=255;
-            flocklist.add(new Bird(pos,vel,mass,bird_color));
+            flocklist.add(new Bird(pos,vel,accel,mass,bird_color));
             
             
           }  
@@ -39,8 +40,7 @@ class Flock
         //this vector will be a random point on the canvas that the birds attempt to move to at each time step
         
         float x=random(0,2*3.1415);
-        Vector destiny = new Vector (500*cos(x)+500,500*sin(x)+500);
-        println(destiny.x," ", destiny.y);
+        Vector destiny = new Vector (500*cos(x)+500,500*sin(x)+500);        
         for (Bird bird : flocklist)
         
         {
@@ -56,8 +56,11 @@ class Flock
           totalcorrection = totalcorrection.addition(v1,v2);
           totalcorrection = totalcorrection.addition(totalcorrection,v3);
           totalcorrection = totalcorrection.addition(totalcorrection,v4);
-          // this factor smooths out the movement 
+          //bird.accel = totalcorrection;
+          // this factor smooths out the movement
+          
           totalcorrection = totalcorrection.scalarmult(.0002,totalcorrection);
+          bird.accel = bird.accel.addition(bird.accel,totalcorrection);
           bird.vel = bird.vel.addition(bird.vel,totalcorrection);
           bird.limitvel();
           bird.pos = bird.pos.addition(bird.pos,bird.vel);
