@@ -1,7 +1,7 @@
 Vector a = new Vector (1,1);
 Vector b = new Vector (0,0);
 ArrayList<Bird> flocklist = new ArrayList<Bird>();
-Flock flock = new Flock(200,flocklist);
+Flock flock = new Flock(20,flocklist);
 Hawk hawk = new Hawk(a,b,flock.flocklist,a);
 void setup()
 
@@ -26,7 +26,7 @@ void draw()
         for (Bird bird : flock.flocklist) 
           {
             bird.display();            
-            //println(bird.pos.x);        
+                    
           }
         //hawk.display();
         //hawk.chaseCenter();
