@@ -1,14 +1,16 @@
 // Bird objects have positions and velocities, and every time step the position is updated with the formula pos=pos+vel, where vel is changing according to several rules.
+// Birds will be composed of two "pieces" a circle, and a triangle. The circles move relative to the other birds and the triangles move relative to the circles within each individual bird.
 class Bird
   {
+    //These refer to the position and velocity of the circle
     Vector pos = new Vector(0,0);
-    Vector vel = new Vector(0,0);
+    Vector vel = new Vector(0,0);  
     float mass = 0.0;
     // this is the birds greyscale color
     int bird_color = 255;
     // vector representing a moving point in a random spot on the canvas which the birds will disperse from if the center of mass is too close to this point
     Vector screen_center = new Vector(random(0,500),random(0,500));
-    Bird(Vector _pos,Vector _vel,float _mass,int bird_color)
+    Bird(Vector _pos,Vector _vel, float _mass,int bird_color)
       {
         pos = _pos;
         vel = _vel;
@@ -87,7 +89,47 @@ class Bird
         Vector dest_correct = bird.pos.subtraction(destiny,bird.pos);
         //this controls the flocks tendency towards a random point 
         return dest_correct.scalarmult(10,dest_correct);
-      }  
+      }
+      
+    //The following Vectors will be used to build the triangles, which will move relative to the circles  
+    Vector tri_head()
+      {
+        //this amounts to solving some quadratic equations
+        float m = (vel.y- pos.y)/(vel.x-pos.x);        
+        float a = 1 + (m*m);      
+        float b = -2*pos.x*(1+m*m);         
+        float c = (pos.x*pos.x)*a-100;        
+        float tri_x = (-b + sqrt((b*b)-4*a*c))/(2*a);
+        float tri_y = m*(tri_x-pos.x)+pos.y;
+        return new Vector (tri_x,tri_y); 
+      }
+    // This involves doing more geometry and more quadratic equations tri is the triangle head from which the feet will be calculated    
+    Vector tri_foot1(Vector tri)
+    
+      {
+        float A= 2*(tri.x-pos.x);
+        float B= 2*(tri.y-pos.y);
+        float C= pos.x*pos.x+pos.y*pos.y-tri.x*tri.x-tri.y*tri.y+100;
+        float a = 1+((B*B)/(A*A));
+        float b = 2*C*B/(A*A)+2*pos.x*B/A-2*pos.y;
+        float c = pos.x*pos.x+pos.y*pos.y+2*pos.x*C/A+((C*C)/(A*A))-100;
+        float foot_y = (-b+sqrt(b*b-4*a*c))/(2*a);
+        float foot_x = -C/A-(B/A)*foot_y;
+        return new Vector (foot_x,foot_y);
+      }
+    Vector tri_foot2(Vector tri)
+      {
+        float A= 2*(tri.x-pos.x);
+        float B= 2*(tri.y-pos.y);
+        float C= pos.x*pos.x+pos.y*pos.y-tri.x*tri.x-tri.y*tri.y+100;
+        float a = 1+((B*B)/(A*A));
+        float b = 2*C*B/(A*A)+2*pos.x*B/A-2*pos.y;
+        float c = pos.x*pos.x+pos.y*pos.y+2*pos.x*C/A+((C*C)/(A*A))-100;
+        float foot_y = (-b-sqrt(b*b-4*a*c))/(2*a);
+        float foot_x = -C/A-(B/A)*foot_y;
+        return new Vector (foot_x,foot_y); 
+      }
+      
     
     void limitvel()
       {
@@ -103,7 +145,16 @@ class Bird
         if (mass != 0)
           {
             fill(bird_color);
-            ellipse(pos.x,pos.y,20,20);  
+           // ellipse(pos.x,pos.y,20,20);
+            Vector triheadvect = this.tri_head();          
+            Vector trifoot1vect = this.tri_foot1(triheadvect);
+            Vector trifoot2vect = this.tri_foot2(triheadvect);
+            println(triheadvect.distance(triheadvect,trifoot2vect));
+            fill(0);
+            triangle(triheadvect.x,triheadvect.y,trifoot1vect.x,trifoot1vect.y,trifoot2vect.x,trifoot2vect.y);
+            stroke(#DB0F0F);                  
+            stroke(0);
+            
           }
       
       }  
