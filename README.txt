@@ -6,6 +6,7 @@ You will also have to install the Minim library within processing.
 
 This program simulates flocking behavior using processing.
 Press '1' to Start and stop the animation.
+Press '2' to toggle the flocking behavior on and off.
 
 There is a working hawk whos behavior is currently commented out. If you would like to mess around with the hawk, uncomment the
 hawk functions within the draw loop in the birdflock file.
