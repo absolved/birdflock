@@ -23,9 +23,9 @@ class Flock
         
         // initializes the flock
         ArrayList<Integer> color_vector= new ArrayList<Integer>();
-          color_vector.add(255);
-          color_vector.add(255);
-          color_vector.add(255);
+          color_vector.add(245);
+          color_vector.add(245);
+          color_vector.add(245);
         for (int i=0; i<size; i++) 
           {
             Vector vel = new Vector(random(-.1,.1),random(-.1,.1));
@@ -57,7 +57,7 @@ class Flock
           Vector v4 = new Vector(0,0);
           Vector totalcorrection = new Vector(0,0);
           
-          // this sounds stops the flocking behavior
+          // this sounds stops the flocking behavior hotkey is '2'
           if (motion_values.get(1) != 1)
             {
               v1 = bird.center(bird,flocklist);
@@ -65,17 +65,30 @@ class Flock
               v3 = bird.align(bird,flocklist);
               v4 = bird.destination(bird,destiny);
             }
-          // rules for drum
-      /*    if (motion_values.get(0) == 1)
+          // rules for whatever. makes the birds change along a color gradient hotkey is '3'
+          if (motion_values.get(2) == 1)
             {
-              Vector v5 = new Vector(0,0);
-              v5 = bird.drum();  
+              
+              float floatshift=random(3);
+              int shift=int(floatshift);
+              int multiplier = 1;
+              
+              float color_sum = bird.color_vector.get(0)+bird.color_vector.get(1)+bird.color_vector.get(2);
+              if (color_sum <= 382)
+                {
+                  bird.color_vector.set(shift,bird.color_vector.get(shift)+1);  
+                }
+              else
+                {
+                  bird.color_vector.set(shift,bird.color_vector.get(shift)-1);  
+                }  
+             
             }
           // rules for horn
           if (motion_values.get(1) == 1)
             {
               
-            } */
+            } 
           // rules for whatever
           if (motion_values.get(2) == 1)
             {

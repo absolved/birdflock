@@ -38,7 +38,7 @@ void setup()
     rect = new ButtonRect(300, 100, 80, 60, color(110), color(200));
 
     minim = new Minim(this); 
-    player = minim.loadFile("crows");
+    player = minim.loadFile("crows.wav");
     println(player.length());
   }
 /* use this if size malfunctions in the setup
@@ -108,6 +108,7 @@ void mouseReleased()
 
 void keyReleased()
 {
+  //this key starts/stops the animation
   if (key == '1')
     {
       if (flock.motion_values.get(0) == 0)
@@ -121,6 +122,7 @@ void keyReleased()
         flock.motion_values.set(0, 0);      
       }
     }
+  //this key toggles the flocking behavior on and off  
   if (key == '2')
     {
       if (flock.motion_values.get(1) == 0)
@@ -134,4 +136,19 @@ void keyReleased()
         flock.motion_values.set(1, 0); 
       }
     }
+    
+  //this key causes them to change pseudorandomly according to a color gradient  
+  if (key == '3')
+    {
+      if (flock.motion_values.get(2) == 0)
+      {
+        flock.motion_values.set(2, 1);
+      }
+      else
+      {
+        //player.pause();
+        //player.rewind();
+        flock.motion_values.set(2, 0); 
+      }
+    }  
 }  
