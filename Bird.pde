@@ -116,10 +116,10 @@ class Bird
       {
         float A= 2*(tri.x-pos.x);
         float B= 2*(tri.y-pos.y);
-        float C= pos.x*pos.x+pos.y*pos.y-tri.x*tri.x-tri.y*tri.y+100;
+        float C= pos.x*pos.x+pos.y*pos.y-tri.x*tri.x-tri.y*tri.y+200;
         float a = 1+((B*B)/(A*A));
         float b = 2*C*B/(A*A)+2*pos.x*B/A-2*pos.y;
-        float c = pos.x*pos.x+pos.y*pos.y+2*pos.x*C/A+((C*C)/(A*A))-100;
+        float c = pos.x*pos.x+pos.y*pos.y+2*pos.x*C/A+((C*C)/(A*A))-200;
         float foot_y = (-b+sqrt(b*b-4*a*c))/(2*a);
         float foot_x = -C/A-(B/A)*foot_y;
         return new Vector (foot_x,foot_y);
@@ -128,10 +128,10 @@ class Bird
       {
         float A= 2*(tri.x-pos.x);
         float B= 2*(tri.y-pos.y);
-        float C= pos.x*pos.x+pos.y*pos.y-tri.x*tri.x-tri.y*tri.y+100;
+        float C= pos.x*pos.x+pos.y*pos.y-tri.x*tri.x-tri.y*tri.y+200;
         float a = 1+((B*B)/(A*A));
         float b = 2*C*B/(A*A)+2*pos.x*B/A-2*pos.y;
-        float c = pos.x*pos.x+pos.y*pos.y+2*pos.x*C/A+((C*C)/(A*A))-100;
+        float c = pos.x*pos.x+pos.y*pos.y+2*pos.x*C/A+((C*C)/(A*A))-200;
         float foot_y = (-b-sqrt(b*b-4*a*c))/(2*a);
         float foot_x = -C/A-(B/A)*foot_y;
         return new Vector (foot_x,foot_y); 
@@ -154,7 +154,7 @@ class Bird
     
     void limitvel()
       {
-        float limit = 5;
+        float limit = 4;
         float norm = sqrt(pow(this.vel.x,2)+pow(this.vel.y,2)); 
         if (norm > limit)
           {
@@ -172,7 +172,7 @@ class Bird
             Vector trifoot2vect = this.tri_foot2(triheadvect);            
             fill(0);
             float area_check = tri_area(triheadvect,trifoot1vect,trifoot2vect); 
-            if (area_check < 110 && area_check > 75)  
+            if (area_check < 200 && area_check > 140)  
               {
                 triangle(triheadvect.x,triheadvect.y,trifoot1vect.x,trifoot1vect.y,trifoot2vect.x,trifoot2vect.y);
                 stroke(#DB0F0F);                  
