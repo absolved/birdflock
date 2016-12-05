@@ -166,7 +166,7 @@ class Bird
         if (mass != 0)
           {
             fill(color_vector.get(0),color_vector.get(1),color_vector.get(2));
-            ellipse(pos.x,pos.y,20,20);
+            ellipse(pos.x,pos.y,25,25);
             Vector triheadvect = this.tri_head();          
             Vector trifoot1vect = this.tri_foot1(triheadvect);
             Vector trifoot2vect = this.tri_foot2(triheadvect);            
