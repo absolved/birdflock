@@ -1,20 +1,25 @@
 // Bird objects have positions and velocities, and every time step the position is updated with the formula pos=pos+vel, where vel is changing according to several rules.
 // Birds will be composed of two "pieces" a circle, and a triangle. The circles move relative to the other birds and the triangles move relative to the circles within each individual bird.
+// acceleration isn't actually used, was just experimented with and turned out to not do what I wanted it to.
 class Bird
   {
     //These refer to the position and velocity of the circle
     Vector pos = new Vector(0,0);
-    Vector vel = new Vector(0,0);  
+    Vector vel = new Vector(0,0);
+    Vector accel = new Vector(0,0);
     float mass = 0.0;
-    // this is the birds greyscale color
-    int bird_color = 255;
+    // this is the birds RGB color
+    ArrayList <Integer> color_vector = new ArrayList<Integer>();    
+    
     // vector representing a moving point in a random spot on the canvas which the birds will disperse from if the center of mass is too close to this point
     Vector screen_center = new Vector(random(0,500),random(0,500));
-    Bird(Vector _pos,Vector _vel, float _mass,int bird_color)
+    Bird(Vector _pos,Vector _vel,Vector _accel, float _mass,ArrayList<Integer> _color_vector)
       {
         pos = _pos;
         vel = _vel;
-        mass = _mass; 
+        accel = _accel;
+        mass = _mass;
+        color_vector = _color_vector; 
       }
     
     // this creates a displacement vector, which will be added to each birds velocity vector in order to move it towards the perceived center of the flock   
@@ -95,7 +100,7 @@ class Bird
     Vector tri_head()
       {
         //this amounts to solving some quadratic equations
-        float m = (vel.y- pos.y)/(vel.x-pos.x);        
+        float m = (1500*vel.x- pos.y)/(1500*vel.y-pos.x);        
         float a = 1 + (m*m);      
         float b = -2*pos.x*(1+m*m);         
         float c = (pos.x*pos.x)*a-100;        
@@ -103,6 +108,8 @@ class Bird
         float tri_y = m*(tri_x-pos.x)+pos.y;
         return new Vector (tri_x,tri_y); 
       }
+      
+      
     // This involves doing more geometry and more quadratic equations tri is the triangle head from which the feet will be calculated    
     Vector tri_foot1(Vector tri)
     
@@ -129,7 +136,21 @@ class Bird
         float foot_x = -C/A-(B/A)*foot_y;
         return new Vector (foot_x,foot_y); 
       }
-      
+    
+    
+    // calculates the area of the triangle formed by abc using Heron's formula
+    float tri_area(Vector a, Vector b, Vector c)
+      {
+        // let A = dist(a,b) B = dist(b,c) and C = dist (a, c)
+        float A = a.distance(a,b);
+        float B = b.distance(b,c);
+        float C = c.distance(a,c);
+        float S = .5*(A+B+C);
+        float area = sqrt(S*(S-A)*(S-B)*(S-C));
+        return area;
+                
+      }  
+    
     
     void limitvel()
       {
@@ -144,16 +165,20 @@ class Bird
       {
         if (mass != 0)
           {
-            fill(bird_color);
-           // ellipse(pos.x,pos.y,20,20);
+            fill(color_vector.get(0),color_vector.get(1),color_vector.get(2));
+            ellipse(pos.x,pos.y,20,20);
             Vector triheadvect = this.tri_head();          
             Vector trifoot1vect = this.tri_foot1(triheadvect);
-            Vector trifoot2vect = this.tri_foot2(triheadvect);
-            println(triheadvect.distance(triheadvect,trifoot2vect));
+            Vector trifoot2vect = this.tri_foot2(triheadvect);            
             fill(0);
-            triangle(triheadvect.x,triheadvect.y,trifoot1vect.x,trifoot1vect.y,trifoot2vect.x,trifoot2vect.y);
-            stroke(#DB0F0F);                  
-            stroke(0);
+            float area_check = tri_area(triheadvect,trifoot1vect,trifoot2vect); 
+            if (area_check < 110 && area_check > 75)  
+              {
+                triangle(triheadvect.x,triheadvect.y,trifoot1vect.x,trifoot1vect.y,trifoot2vect.x,trifoot2vect.y);
+                stroke(#DB0F0F);                  
+                stroke(0);
+              }  
+            //line(pos.x,pos.y,accel.x,accel.y);
             
           }
       

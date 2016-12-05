@@ -3,28 +3,36 @@
 class Flock
   {
     int size;
-    ArrayList<Bird> flocklist; 
+    ArrayList<Bird> flocklist;
+    ArrayList<Integer> motion_values;
     
     Flock() 
       {
         int size = 0;
         ArrayList<Bird> flocklist = new ArrayList<Bird>();
+        ArrayList<Integer> motion_values = new ArrayList <Integer>();
       }
       
-    Flock(int _size, ArrayList<Bird> _flocklist)
+    Flock(int _size, ArrayList<Bird> _flocklist, ArrayList<Integer> _motion_values)
     
       {
         size = _size;
         flocklist = _flocklist;
+        motion_values = _motion_values;
+        
         
         // initializes the flock
+        ArrayList<Integer> color_vector= new ArrayList<Integer>();
+          color_vector.add(255);
+          color_vector.add(255);
+          color_vector.add(255);
         for (int i=0; i<size; i++) 
           {
             Vector vel = new Vector(random(-.1,.1),random(-.1,.1));
             Vector pos = new Vector(random(500),random(500));
-            float mass = 1;
-            int bird_color=255;
-            flocklist.add(new Bird(pos,vel,mass,bird_color));
+            Vector accel = new Vector(0,0);
+            float mass = 1;            
+            flocklist.add(new Bird(pos,vel,accel,mass,color_vector));
             
             
           }  
@@ -47,22 +55,58 @@ class Flock
           Vector v2 = new Vector(0,0);
           Vector v3 = new Vector(0,0);
           Vector v4 = new Vector(0,0);
-          Vector totalcorrection = new Vector(0,0);          
-          v1 = bird.center(bird,flocklist);
-          v2 = bird.collide(bird,flocklist);
-          v3 = bird.align(bird,flocklist);
-          v4 = bird.destination(bird,destiny);          
+          Vector totalcorrection = new Vector(0,0);
+          
+          // this sounds stops the flocking behavior
+          if (motion_values.get(1) != 1)
+            {
+              v1 = bird.center(bird,flocklist);
+              v2 = bird.collide(bird,flocklist);
+              v3 = bird.align(bird,flocklist);
+              v4 = bird.destination(bird,destiny);
+            }
+          // rules for drum
+      /*    if (motion_values.get(0) == 1)
+            {
+              Vector v5 = new Vector(0,0);
+              v5 = bird.drum();  
+            }
+          // rules for horn
+          if (motion_values.get(1) == 1)
+            {
+              
+            } */
+          // rules for whatever
+          if (motion_values.get(2) == 1)
+            {
+              
+            }
+          // rules for bass drop
+          if (motion_values.get(3) == 1)
+            {
+              
+            }  
+            
+            
+            
+            
           totalcorrection = totalcorrection.addition(v1,v2);
           totalcorrection = totalcorrection.addition(totalcorrection,v3);
           totalcorrection = totalcorrection.addition(totalcorrection,v4);
-          // this factor smooths out the movement 
+          
+      
+          // this factor smooths out the movement
+          
           totalcorrection = totalcorrection.scalarmult(.0002,totalcorrection);
+          //bird.accel = bird.accel.addition(bird.accel,totalcorrection);
           bird.vel = bird.vel.addition(bird.vel,totalcorrection);
           bird.limitvel();
           bird.pos = bird.pos.addition(bird.pos,bird.vel);
         
         }  
       }  
+      
+      
     void boundFlock()
       {
         int xmax = 1000;
