@@ -150,5 +150,18 @@ void keyReleased()
         //player.rewind();
         flock.motion_values.set(2, 0); 
       }
-    }  
+    }
+  if (key == '4')
+    {
+      if (flock.motion_values.get(3) == 0)
+      {
+        flock.motion_values.set(3, 1);
+      }
+      else
+      {
+        //player.pause();
+        //player.rewind();
+        flock.motion_values.set(3, 0); 
+      }
+    }
 }  

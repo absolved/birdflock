@@ -1,5 +1,6 @@
 // A flock object is a list of bird objects with two methods, moveFlock, which moves the birds according to several rules defined in the bird class,
 // and boundFlock, which attempts to keep birds on the screen smoothly
+// This class is structured so that motion_values is a set of integers controlling which behaviors are controlling the movement of the flock 
 class Flock
   {
     int size;
@@ -61,6 +62,10 @@ class Flock
           if (motion_values.get(1) != 1)
             {
               v1 = bird.center(bird,flocklist);
+              if (motion_values.get(3) == 1)
+                {
+                  v1 = v1.scalarmult(-1000,v1);
+                }  
               v2 = bird.collide(bird,flocklist);
               v3 = bird.align(bird,flocklist);
               v4 = bird.destination(bird,destiny);
@@ -84,11 +89,14 @@ class Flock
                 }  
              
             }
-          // rules for horn
-          if (motion_values.get(1) == 1)
+          // rules for drum; causes a scattering effect
+          if (motion_values.get(3) == 1 && motion_values.get(1) == 1)
             {
-              
-            } 
+              v1 = bird.center(bird,flocklist);
+              v1 = v1.scalarmult(-1000,v1);   
+            }
+        //  else if (motion_values.get(1) == 1 
+        
           // rules for whatever
           if (motion_values.get(2) == 1)
             {
