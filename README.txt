@@ -42,5 +42,5 @@ take "size(1000,1000)" out of the setup function, and uncomment the settings fun
 Acknowledgements and Citations:
 Images taken from www.aerialwallpapers.tumblr.com
 Crow soundfile taken from alfdroid@freesound.org. http://freesound.org/people/alfdroid/sounds/265264/
-
+Shout out to Daniel DJ MOOSEBUMP Vuong for the intro/pause song! 
 (Some) of the math is explained in the PDFs. May add more if I get bored.
