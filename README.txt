@@ -6,7 +6,7 @@ You will also have to install the Minim library within processing.
 *************************
 
 This program simulates flocking behavior using processing.
-First, select an environment of choice using the radio buttons.
+First, select an environment of choice using the radio buttons. Click the mute button to mute the sound.
 Press '1' to Start and stop the animation.
 Press '2' to toggle the flocking behavior on and off.
 Press '3' to toggle the birds changing colors pseudorandomly along a gradient
