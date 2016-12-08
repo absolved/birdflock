@@ -130,36 +130,31 @@ class Flock
       
     void boundFlock()
       {
-        int drum_mult=1;
+        
         int xmax = 1000;
         int xmin = 0;
         int ymax = 1000;
-        int ymin = 0;
-        
-        if (motion_values.get(3) != 0)
-          {
-            drum_mult=5000;
-          }
-            
+        int ymin = 0;      
+              
              
         for (Bird bird: flocklist)
           {
             Vector bound = new Vector(0,0);
             if (bird.pos.x > xmax)
               {
-                bound.x = -.05*drum_mult;    
+                bound.x = -.05;    
               }
             else if (bird.pos.x < xmin)
               {
-                bound.x = .05*drum_mult;  
+                bound.x = .05;  
               }
             if (bird.pos.y > ymax)
               {
-                bound.y = -.05*drum_mult;  
+                bound.y = -.05;  
               }
-            else if (bird.pos.y < ymax)
+            else if (bird.pos.y < ymin)
               {
-                bound.y = .05*drum_mult;  
+                bound.y = .05;  
               }
           bird.vel = bird.vel.addition(bird.vel,bound);    
           }  
