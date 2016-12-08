@@ -127,13 +127,13 @@ class Flock
         }  
       }  
       
-      
+    // this function is used to keep the birds within the screen  
     void boundFlock()
       {
         
-        int xmax = 1000;
+        int xmax = width;
         int xmin = 0;
-        int ymax = 1000;
+        int ymax = height;
         int ymin = 0;      
               
              

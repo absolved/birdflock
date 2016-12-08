@@ -50,7 +50,7 @@ int start_button = 0;
 ArrayList<Bird> flocklist = new ArrayList<Bird>();
 
 //this controls the size of the flock. Be careful with large numbers of birds! 
-Flock flock = new Flock(20,flocklist,motion_values);
+Flock flock = new Flock(50,flocklist,motion_values);
 
 //Initializes an experimental hawk
 Vector a = new Vector (1,1);
@@ -89,7 +89,7 @@ void setup()
     //loads in the sounds
     minim1 = new Minim(this);
     // use crows.wav if you have the improved soundfile, crows.mp3 if you have the smaller one
-    crows = minim1.loadFile("crows.mp3");
+    crows = minim1.loadFile("crows.wav");
     minim2 = new Minim(this); 
     music = minim2.loadFile("musicloop.mp3");
     music.play();
@@ -255,7 +255,7 @@ void keyReleased()
         flock.motion_values.set(1, 1);
         thunder.play();
         fill(#E3FFFD);
-        rect(0, 0, 1000, 1000);
+        rect(0, 0, width, height);
       }
       else
       {
