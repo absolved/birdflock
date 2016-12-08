@@ -89,11 +89,11 @@ class Flock
                 }  
              
             }
-          // rules for drum; causes a scattering effect
+          // rules for drum; toggle a scatter effect on and off
           if (motion_values.get(3) == 1 && motion_values.get(1) == 1)
             {
               v1 = bird.center(bird,flocklist);
-              v1 = v1.scalarmult(-1000,v1);   
+              v1 = v1.scalarmult(-500,v1);   
             }
         //  else if (motion_values.get(1) == 1 
         
@@ -130,28 +130,36 @@ class Flock
       
     void boundFlock()
       {
+        int drum_mult=1;
         int xmax = 1000;
         int xmin = 0;
         int ymax = 1000;
         int ymin = 0;
+        
+        if (motion_values.get(3) != 0)
+          {
+            drum_mult=5000;
+          }
+            
+             
         for (Bird bird: flocklist)
           {
             Vector bound = new Vector(0,0);
             if (bird.pos.x > xmax)
               {
-                bound.x = -.05;    
+                bound.x = -.05*drum_mult;    
               }
             else if (bird.pos.x < xmin)
               {
-                bound.x = .05;  
+                bound.x = .05*drum_mult;  
               }
             if (bird.pos.y > ymax)
               {
-                bound.y = -.05;  
+                bound.y = -.05*drum_mult;  
               }
             else if (bird.pos.y < ymax)
               {
-                bound.y = .05;  
+                bound.y = .05*drum_mult;  
               }
           bird.vel = bird.vel.addition(bird.vel,bound);    
           }  
