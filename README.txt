@@ -9,7 +9,9 @@ First, select an environment of choice using the radio buttons.
 Press '1' to Start and stop the animation.
 Press '2' to toggle the flocking behavior on and off.
 Press '3' to toggle the birds changing colors pseudorandomly along a gradient
-Press '4' to toggle a scattering effect. 
+Press '4' to toggle a scattering effect that lasts for five seconds.
+
+-The drum('4') is a little bit buggy, but it looks pretty cool so we'll call it a feature.
 
 Have fun and play around with different combinations of keys! 
 
