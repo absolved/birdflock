@@ -5,6 +5,7 @@ Hotkeys
 '2' - Lightning Strike : toggles the flocking behavior on/off
 '3' - Color Gradient : toggle the color gradient. If you like a color press 3 again to stay that color!
 '4' - Drum Beat : scatters the flock, has them come back after around 5 seconds
+'5' Line formation - toggle the birds traveling in a line together
 *******/
 
 //sound imports
@@ -75,7 +76,7 @@ void setup()
     backgrounds.add(4,ice);
     backgrounds.add(5,mountains);
     
-    for (int i =0; i <5; i++)
+    for (int i =0; i <6; i++)
       {
         motion_values.add(i,0);
       }
@@ -109,45 +110,46 @@ void setup()
   }
 
 void draw()
-  {
+  {      
     
     //sets the background based on which radio button is pressed
     background(backgrounds.get(image_int));
+    
     fill(#E413F0);
-    textSize(16);
-    text("Island            Delta           Desert            Ice          Mountains", 275, 900);
+    textSize(16);    
+    text("Island            Delta           Desert            Ice          Mountains", 275, 900);    
     for (Radio r : radioButtons) 
       {
         r.display();
-      }
+      }      
     if(start_button == 0)
-    {
-      
-    for(int i =0; i <5; i++)
       {
-      if(radioButtons[i].isChecked == true)
-        {
-          start_button = 1;
-        }
-      }
-    }
+      
+        for(int i =0; i <5; i++)
+          {
+            if(radioButtons[i].isChecked == true)
+              {
+                start_button = 1;
+              }
+          }
+       }
     else
       {
         for(int i =0; i <5; i++)
-      {
-      if(radioButtons[i].isChecked == true)
-        {
-          image_int = i+1;
-        }     
-      }  
-     
-      if (flock.flocklist.size() > 0)
-        {
-          for (Bird bird : flock.flocklist) 
-            {            
-              bird.display();            
-                      
-            }
+          {
+            if(radioButtons[i].isChecked == true)
+              {
+                image_int = i+1;
+              }     
+          }  
+    
+        if (flock.flocklist.size() > 0)
+          {
+            for (Bird bird : flock.flocklist) 
+              {            
+                bird.display();         
+              }     
+              
           //hawk.display();
           //hawk.chaseCenter();
           //hawk.chaseTarget();
@@ -195,7 +197,8 @@ void draw()
           drumPressed=false;
           flock.motion_values.set(3,0);
         }  
-    }  
+    }
+    
   }
   
 void mousePressed() 
@@ -296,5 +299,21 @@ void keyReleased()
           drum.rewind();
         }
     }
+  
+  // this key will cause the flock to form a line   
+  if (key == '5')
+    {
+      if (flock.motion_values.get(4) == 0)
+      {
+        flock.motion_values.set(4, 1);
+    //    wat.play();
+      }
+      else
+      {       
+    //    wat.pause();
+    //    wat.rewind();
+        flock.motion_values.set(4, 0);      
+      }
+    }  
 
 }  

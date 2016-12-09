@@ -1,6 +1,7 @@
 // Bird objects have positions and velocities, and every time step the position is updated with the formula pos=pos+vel, where vel is changing according to several rules.
 // Birds will be composed of two "pieces" a circle, and a triangle. The circles move relative to the other birds and the triangles move relative to the circles within each individual bird.
 // acceleration isn't actually used, was just experimented with and turned out to not do what I wanted it to.
+// additionally, mass is used to interact with the Hawk, which isn't in the program currently
 class Bird
   {
     //These refer to the position and velocity of the circle
