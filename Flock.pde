@@ -69,9 +69,13 @@ class Flock
         for (Bird bird : flocklist)
         
         {
+          //v1 is the displacement for the center convergence 
           Vector v1 = new Vector(0,0);
+          //v2 is the displacement for the collision detection
           Vector v2 = new Vector(0,0);
-          Vector v3 = new Vector(0,0);          
+          //v3 is the displacement for the alignment convergence
+          Vector v3 = new Vector(0,0);
+          //v4 is the displacement for the convergence to a point about the circle of radius 500 centered at 500,500.
           Vector v4 = new Vector(0,0);
           //v5 is the vector for the line formation motion
           Vector v5 = new Vector(0,0);
@@ -118,15 +122,30 @@ class Flock
               float floatshift=random(3);
               int shift=int(floatshift);
               int multiplier = 1;
+              float direction_mult=random(0,2);
               
               float color_sum = bird.color_vector.get(0)+bird.color_vector.get(1)+bird.color_vector.get(2);
-              if (color_sum <= 382)
+              if (color_sum <= 50)
                 {
                   bird.color_vector.set(shift,bird.color_vector.get(shift)+1);  
                 }
               else
                 {
-                  bird.color_vector.set(shift,bird.color_vector.get(shift)-1);  
+                  if (color_sum >= 715)
+                    {
+                      bird.color_vector.set(shift,bird.color_vector.get(shift)-1);
+                    }
+                  else
+                    {
+                      if (direction_mult == 0)
+                        {
+                          bird.color_vector.set(shift,bird.color_vector.get(shift)-1);  
+                        }
+                      else
+                        {
+                          bird.color_vector.set(shift,bird.color_vector.get(shift)+1);  
+                        }  
+                    }  
                 }  
              
             }
