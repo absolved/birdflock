@@ -12,14 +12,26 @@ Hotkeys
 import ddf.minim.*;
 
 //creates the sound players
-Minim minim1;
-Minim minim2;
-Minim minim3;
-Minim minim4;
+Minim minim_crows;
+Minim minim_startmusic;
+Minim minim_drum;
+Minim minim_clap;
+Minim minim_thunder;
+Minim minim_peacock;
+Minim minim_pianoscale;
+Minim minim_pianodiscord;
+Minim minim_whistleup;
+Minim minim_whistledown;
 AudioPlayer crows;
-AudioPlayer music;
+AudioPlayer startmusic;
 AudioPlayer drum;
+AudioPlayer clap;
 AudioPlayer thunder;
+AudioPlayer peacock;
+AudioPlayer pianoscale;
+AudioPlayer pianodiscord;
+AudioPlayer whistleup;
+AudioPlayer whistledown;
 
 // This number will be used to keep the drum active for a few seconds, then have flocking behavior return to normal
 float drum_time;
@@ -88,17 +100,28 @@ void setup()
     mute = new ButtonRect(850, 900, 80, 60, color(110), color(200));
 
     //loads in the sounds
-    minim1 = new Minim(this);
+    minim_crows = new Minim(this);
     // use crows.wav if you have the improved soundfile, crows.mp3 if you have the smaller one
-    crows = minim1.loadFile("crows.wav");
-    minim2 = new Minim(this); 
-    music = minim2.loadFile("musicloop.mp3");
-    music.play();
-    minim3 = new Minim(this);
-    drum = minim3.loadFile("bassdrum.wav");
-    minim4 = new Minim(this);
-    thunder = minim4.loadFile("thunder.mp3");
-    
+    crows = minim_crows.loadFile("crows.wav");
+    minim_startmusic = new Minim(this); 
+    startmusic = minim_startmusic.loadFile("musicloop.mp3");
+    startmusic.play();
+    minim_drum = new Minim(this);
+    drum = minim_drum.loadFile("bassdrum.wav");
+    minim_clap = new Minim(this);
+    clap = minim_clap.loadFile("clap.wav");
+    minim_thunder = new Minim(this);
+    thunder = minim_thunder.loadFile("thunder.mp3");
+    minim_peacock = new Minim(this);
+    peacock = minim_peacock.loadFile("peacock.wav");
+    minim_pianoscale = new Minim(this);     
+    pianoscale = minim_pianoscale.loadFile("C_pianoscale.wav");
+    minim_pianodiscord = new Minim(this);
+    pianodiscord = minim_pianodiscord.loadFile("piano_discord.wav");
+    minim_whistleup = new Minim(this);
+    whistleup = minim_whistleup.loadFile("slide_whistleup.wav");
+    minim_whistledown = new Minim(this);
+    whistledown= minim_whistledown.loadFile("slide_whistledown.wav");
 
     // creates the buttons for the background menu 
     for (int i = 0; i < radioButtons.length; i++) 
@@ -176,10 +199,10 @@ void draw()
                   
             }
             
-            if (music.position() == music.length() )
+            if (startmusic.position() == startmusic.length() )
             {
-              music.rewind();
-              music.play();
+              startmusic.rewind();
+              startmusic.play();
             }
           
         }
@@ -209,16 +232,28 @@ void mousePressed()
     if (rectPressed)
     {
       crows.mute();
-      music.mute();
+      startmusic.mute();
       drum.mute();
+      clap.mute();
       thunder.mute();
+      peacock.mute();
+      whistleup.mute();
+      whistledown.mute();
+      pianoscale.mute();
+      pianodiscord.mute();
     }
     else
     {
       crows.unmute();
-      music.unmute();
+      startmusic.unmute();
       drum.unmute();
       thunder.unmute();
+      peacock.unmute();
+      clap.unmute();
+      whistleup.unmute();
+      whistledown.unmute();
+      pianoscale.unmute();
+      pianodiscord.unmute();
     }
   }
   for (Radio r : radioButtons) 
@@ -240,11 +275,11 @@ void keyReleased()
       if (flock.motion_values.get(0) == 0)
       {
         flock.motion_values.set(0, 1);
-        music.pause();
+        startmusic.pause();
       }
       else
       {
-        music.play();
+        startmusic.play();
         crows.pause();
         crows.rewind();
         flock.motion_values.set(0, 0);      
@@ -253,15 +288,20 @@ void keyReleased()
   //this key toggles the flocking behavior on and off  
   if (key == '2')
     {
+      pianoscale.pause();
+      pianoscale.rewind();
       if (flock.motion_values.get(1) == 0)
       {
         flock.motion_values.set(1, 1);
         thunder.play();
+        peacock.pause();
+        peacock.rewind();
         fill(#E3FFFD);
         rect(0, 0, width, height);
       }
       else
       {
+        peacock.play();
         flock.motion_values.set(1, 0);
         thunder.pause();
         thunder.rewind();
@@ -273,12 +313,16 @@ void keyReleased()
     {
       if (flock.motion_values.get(2) == 0)
       {
+        pianoscale.play();
+        pianoscale.rewind();
         flock.motion_values.set(2, 1);
       }
       else
       {
-        //crows.pause();
-        //crows.rewind();
+        pianoscale.pause();
+        pianoscale.rewind();
+        pianodiscord.play();
+        pianodiscord.rewind();
         flock.motion_values.set(2, 0); 
       }
     }
@@ -288,7 +332,9 @@ void keyReleased()
     {
       if (flock.motion_values.get(3) == 1)
         {
-          flock.motion_values.set(3,0);  
+          flock.motion_values.set(3,0);
+          clap.play();
+          clap.rewind();
         }
       else
         {
@@ -306,12 +352,15 @@ void keyReleased()
       if (flock.motion_values.get(4) == 0)
       {
         flock.motion_values.set(4, 1);
-    //    wat.play();
+        whistleup.play();
+        whistledown.pause();
+        whistledown.rewind();
       }
       else
-      {       
-    //    wat.pause();
-    //    wat.rewind();
+      { 
+        whistledown.play();
+        whistleup.pause();
+        whistleup.rewind();
         flock.motion_values.set(4, 0);      
       }
     }  
