@@ -1,4 +1,5 @@
 **IN ORDER TO RUN THIS:**
+You will need at least 1000x1000 screen resolution
 You will need to download processing from processing.org.
 You will have to create a folder called "data" in your birdflock folder and put all of the sounds into that folder. 
 You will also have to install the Minim library within processing.
