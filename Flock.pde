@@ -24,9 +24,9 @@ class Flock
         
         // initializes the flock
         ArrayList<Integer> color_vector= new ArrayList<Integer>();
-          color_vector.add(245);
-          color_vector.add(245);
-          color_vector.add(245);
+          color_vector.add(255);
+          color_vector.add(255);
+          color_vector.add(255);
         for (int i=0; i<size; i++) 
           {
             Vector vel = new Vector(random(-.1,.1),random(-.1,.1));
@@ -62,13 +62,15 @@ class Flock
       {
         //this vector will be a random point on the canvas that the birds attempt to move to at each time step
         
-        float x=random(0,2*3.1415);
+        
      // float x = millis();
-        Vector destiny = new Vector (500*cos(x)+500,500*sin(x)+500);
+        
         int bird_counter = 0;
         for (Bird bird : flocklist)
         
         {
+          float x=random(0,2*3.1415);          
+          Vector destiny = new Vector (500*cos(x)+500,500*sin(x)+500);            
           //v1 is the displacement for the center convergence 
           Vector v1 = new Vector(0,0);
           //v2 is the displacement for the collision detection
@@ -84,6 +86,7 @@ class Flock
           // this sounds stops the flocking behavior hotkey is '2'
           if (motion_values.get(1) != 1)
             {
+              
               if ( bird == flocklist.get(0) && motion_values.get(4) == 1)
                     {
                       v4 = bird.destination(bird,destiny);
@@ -115,23 +118,43 @@ class Flock
                 
    
             }
+          // non-flocking behavior; still need to figure out how to get the triangles to work in this case..  
+          if (motion_values.get(1) == 1)
+            {
+            //  v4 = bird.destination(bird,destiny);
+              int coinflip= int(random(0,2));
+              float destmult=0;
+              if (coinflip == 0)
+                {
+                  destmult = .1;
+                }
+              else
+                {
+                  destmult=-.1;  
+                }  
+              v4=v4.addition(v4,bird.vel.subtraction(bird.vel,getFlockCenter()));
+              v4 = v4.scalarmult(destmult,v4);
+              if (motion_values.get(3) == 1)
+                {
+                  v1 = bird.center(bird,flocklist);
+                  v1 = v1.scalarmult(-500,v1);   
+                }
+            } 
           //makes the birds change along a color gradient hotkey is '3'
           if (motion_values.get(2) == 1)
-            {
-              
-              float floatshift=random(3);
-              int shift=int(floatshift);
-              int multiplier = 1;
+            {                           
+              int shift=int(random(3));              
               float direction_mult=random(0,2);
-              
+                           
+                
               float color_sum = bird.color_vector.get(0)+bird.color_vector.get(1)+bird.color_vector.get(2);
-              if (color_sum <= 50)
+              if (color_sum <= 5)
                 {
                   bird.color_vector.set(shift,bird.color_vector.get(shift)+1);  
                 }
               else
                 {
-                  if (color_sum >= 715)
+                  if (color_sum >= 760)
                     {
                       bird.color_vector.set(shift,bird.color_vector.get(shift)-1);
                     }
@@ -145,16 +168,13 @@ class Flock
                         {
                           bird.color_vector.set(shift,bird.color_vector.get(shift)+1);  
                         }  
+                      
                     }  
-                }  
              
+                }
             }
           // rules for drum; toggle a scatter effect on and off
-          if (motion_values.get(3) == 1 && motion_values.get(1) == 1)
-            {
-              v1 = bird.center(bird,flocklist);
-              v1 = v1.scalarmult(-500,v1);   
-            }
+          
         
         
   
@@ -172,10 +192,9 @@ class Flock
           totalcorrection = totalcorrection.addition(totalcorrection,v4);
           totalcorrection = totalcorrection.addition(totalcorrection,v5);
        
-          // this factor smooths out the movement
-          
+          // this factor smooths out the movement          
           totalcorrection = totalcorrection.scalarmult(.0002,totalcorrection);
-          //bird.accel = bird.accel.addition(bird.accel,totalcorrection);
+         // bird.accel = bird.accel.addition(bird.accel,totalcorrection);
           bird.vel = bird.vel.addition(bird.vel,totalcorrection);
           bird.limitvel();
              
