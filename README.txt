@@ -8,7 +8,7 @@ This program simulates flocking behavior using processing.
 First, select an environment of choice using the radio buttons.
 Press '1' to Start and stop the animation.
 Press '2' to toggle the flocking behavior on and off.
-Press '3' to toggle the birds changing colors pseudorandomly along a gradient
+Press '3' to toggle the birds changing colors pseudorandomly along a gradient.
 Press '4' to toggle a scattering effect that lasts for five seconds.
 Press '5' to toggle the line formation of the flock, like a train.
 
