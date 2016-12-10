@@ -1,6 +1,7 @@
 // Bird objects have positions and velocities, and every time step the position is updated with the formula pos=pos+vel, where vel is changing according to several rules.
 // Birds will be composed of two "pieces" a circle, and a triangle. The circles move relative to the other birds and the triangles move relative to the circles within each individual bird.
 // acceleration isn't actually used, was just experimented with and turned out to not do what I wanted it to.
+// additionally, mass is used to interact with the Hawk, which isn't in the program currently
 class Bird
   {
     //These refer to the position and velocity of the circle
@@ -99,7 +100,7 @@ class Bird
     //The following Vectors will be used to build the triangles, which will move relative to the circles  
     Vector tri_head()
       {
-        //this amounts to solving some quadratic equations
+        //this amounts to solving some quadratic equations. multiplying the velocity by a constant seems to smooth out the movement, will have to figure this out.
         float m = (1500*vel.x- pos.y)/(1500*vel.y-pos.x);        
         float a = 1 + (m*m);      
         float b = -2*pos.x*(1+m*m);         
@@ -166,6 +167,7 @@ class Bird
         if (mass != 0)
           {
             fill(color_vector.get(0),color_vector.get(1),color_vector.get(2));
+            stroke(0);
             ellipse(pos.x,pos.y,25,25);
             Vector triheadvect = this.tri_head();          
             Vector trifoot1vect = this.tri_foot1(triheadvect);
@@ -174,9 +176,9 @@ class Bird
             float area_check = tri_area(triheadvect,trifoot1vect,trifoot2vect); 
             if (area_check < 200 && area_check > 140)  
               {
-                triangle(triheadvect.x,triheadvect.y,trifoot1vect.x,trifoot1vect.y,trifoot2vect.x,trifoot2vect.y);
-                stroke(#DB0F0F);                  
-                stroke(0);
+                
+                triangle(triheadvect.x,triheadvect.y,trifoot1vect.x,trifoot1vect.y,trifoot2vect.x,trifoot2vect.y);                                  
+                
               }  
             //line(pos.x,pos.y,accel.x,accel.y);
             

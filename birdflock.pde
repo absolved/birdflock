@@ -1,6 +1,17 @@
-// all of the imports needed for sounds
+
+/******
+Hotkeys
+'1' - Start/Stop
+'2' - Lightning Strike : toggles the flocking behavior on/off
+'3' - Color Gradient : toggle the color gradient. If you like a color press 3 again to stay that color!
+'4' - Drum Beat : scatters the flock, has them come back after around 5 seconds
+'5' Line formation - toggle the birds traveling in a line together
+*******/
+
+//sound imports
 import ddf.minim.*;
 
+//creates the sound players
 Minim minim1;
 Minim minim2;
 Minim minim3;
@@ -9,6 +20,12 @@ AudioPlayer crows;
 AudioPlayer music;
 AudioPlayer drum;
 AudioPlayer thunder;
+
+// This number will be used to keep the drum active for a few seconds, then have flocking behavior return to normal
+float drum_time;
+boolean drumPressed=false;
+
+//creates the image objects for the backgrounds.
 PImage islands;
 PImage delta;
 PImage desert;
@@ -17,24 +34,35 @@ PImage mountains;
 PImage startscreen;
 ArrayList<PImage> backgrounds = new ArrayList<PImage>();
 
+//this will control which background is selected
 Integer image_int=0;
 
 // creates buttons
 ButtonRect mute;
 boolean rectPressed = false;
+
+/*motion_values is a list of integers that keeps track of which key is pressed and since it is associated with the flock, the flock 'knows' 
+which key is toggled. 
+*/
 ArrayList<Integer> motion_values = new ArrayList<Integer>();
 Radio[] radioButtons = new Radio[5];
 
 int start_button = 0;
+ArrayList<Bird> flocklist = new ArrayList<Bird>();
+
+//this controls the size of the flock. Be careful with large numbers of birds! 
+Flock flock = new Flock(50,flocklist,motion_values);
+
+//Initializes an experimental hawk
 Vector a = new Vector (1,1);
 Vector b = new Vector (0,0);
-ArrayList<Bird> flocklist = new ArrayList<Bird>();
-Flock flock = new Flock(20,flocklist,motion_values);
 Hawk hawk = new Hawk(a,b,flock.flocklist,a);
+
 void setup()
 
   {
-  //  startscreen = loadImage("archipelago.jpg");
+    drum_time=millis();
+    //loads in the background images, and adds them to backgrounds list
     islands = loadImage("archipelago.jpg");
     delta = loadImage("delta.jpg");
     desert = loadImage("desert.jpg");
@@ -47,10 +75,11 @@ void setup()
     backgrounds.add(3,desert);
     backgrounds.add(4,ice);
     backgrounds.add(5,mountains);
-    for (int i =0; i <5; i++)
-    {
-      motion_values.add(i,0);
-    }
+    
+    for (int i =0; i <6; i++)
+      {
+        motion_values.add(i,0);
+      }
     
     // use the settings function if size doesnt work here
     size(1000,1000);
@@ -58,8 +87,10 @@ void setup()
     
     mute = new ButtonRect(850, 900, 80, 60, color(110), color(200));
 
-    minim1 = new Minim(this); 
-    crows = minim1.loadFile("crows.mp3");
+    //loads in the sounds
+    minim1 = new Minim(this);
+    // use crows.wav if you have the improved soundfile, crows.mp3 if you have the smaller one
+    crows = minim1.loadFile("crows.wav");
     minim2 = new Minim(this); 
     music = minim2.loadFile("musicloop.mp3");
     music.play();
@@ -69,53 +100,56 @@ void setup()
     thunder = minim4.loadFile("thunder.mp3");
     
 
-    
+    // creates the buttons for the background menu 
     for (int i = 0; i < radioButtons.length; i++) 
     {
     int x = 300 + i*100;
     radioButtons[i] = new Radio(x, 950, 20, color(#E413F0), color(0), i, radioButtons);
     }
+    
   }
 
 void draw()
-  {
+  {      
     
+    //sets the background based on which radio button is pressed
     background(backgrounds.get(image_int));
+    
     fill(#E413F0);
-    textSize(16);
-    text("Island            Delta           Desert            Ice          Mountains", 275, 900);
+    textSize(16);    
+    text("Island            Delta           Desert            Ice          Mountains", 275, 900);    
     for (Radio r : radioButtons) 
       {
         r.display();
-      }
+      }      
     if(start_button == 0)
-    {
-      
-    for(int i =0; i <5; i++)
       {
-      if(radioButtons[i].isChecked == true)
-        {
-          start_button = 1;
-        }
-      }
-    }
+      
+        for(int i =0; i <5; i++)
+          {
+            if(radioButtons[i].isChecked == true)
+              {
+                start_button = 1;
+              }
+          }
+       }
     else
       {
         for(int i =0; i <5; i++)
-      {
-      if(radioButtons[i].isChecked == true)
-        {
-          image_int = i+1;
-        }     
-      }  
-     
-      if (flock.flocklist.size() > 0)
-        {
-          for (Bird bird : flock.flocklist) 
-            {            
-              bird.display();            
-                      
-            }
+          {
+            if(radioButtons[i].isChecked == true)
+              {
+                image_int = i+1;
+              }     
+          }  
+    
+        if (flock.flocklist.size() > 0)
+          {
+            for (Bird bird : flock.flocklist) 
+              {            
+                bird.display();         
+              }     
+              
           //hawk.display();
           //hawk.chaseCenter();
           //hawk.chaseTarget();
@@ -156,6 +190,15 @@ void draw()
     textSize(25);
     text("Mute", 855, 885);
     fill(255);
+    if (drumPressed)
+    {
+      if ((millis()-drum_time) > 5000)
+        {
+          drumPressed=false;
+          flock.motion_values.set(3,0);
+        }  
+    }
+    
   }
   
 void mousePressed() 
@@ -215,7 +258,7 @@ void keyReleased()
         flock.motion_values.set(1, 1);
         thunder.play();
         fill(#E3FFFD);
-        rect(0, 0, 1000, 1000);
+        rect(0, 0, width, height);
       }
       else
       {
@@ -225,7 +268,7 @@ void keyReleased()
       }
     }
     
-  //this key causes them to change pseudorandomly according to a color gradient  
+  //this key causes the birds to change pseudorandomly according to a color gradient  
   if (key == '3')
     {
       if (flock.motion_values.get(2) == 0)
@@ -243,15 +286,34 @@ void keyReleased()
     
   if (key == '4')
     {
-      if (flock.motion_values.get(3) == 0)
+      if (flock.motion_values.get(3) == 1)
+        {
+          flock.motion_values.set(3,0);  
+        }
+      else
+        {
+          flock.motion_values.set(3,1);
+          drumPressed=true;
+          drum_time=millis();
+          drum.play();
+          drum.rewind();
+        }
+    }
+  
+  // this key will cause the flock to form a line   
+  if (key == '5')
+    {
+      if (flock.motion_values.get(4) == 0)
       {
-        flock.motion_values.set(3, 1);
-        drum.play();
-        drum.rewind();
+        flock.motion_values.set(4, 1);
+    //    wat.play();
       }
       else
-      {
-        flock.motion_values.set(3, 0); 
+      {       
+    //    wat.pause();
+    //    wat.rewind();
+        flock.motion_values.set(4, 0);      
       }
-    }
+    }  
+
 }  
