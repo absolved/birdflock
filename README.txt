@@ -1,8 +1,11 @@
 **IN ORDER TO RUN THIS:**
-You will need at least 1000x1000 screen resolution
+You will need java.
+You will need at least 1000x1000 screen resolution.
 You will need to download processing from processing.org.
 You will have to create a folder called "data" in your birdflock folder and put all of the sounds into that folder. 
 You will also have to install the Minim library within processing.
+
+Application version coming soon. Making changes so frequently that I don't like uploading it constantly.
 *************************
 
 This program simulates flocking behavior using processing.
@@ -22,18 +25,18 @@ hawk functions within the draw loop in the birdflock file.
 
 If you would like to mess with the flocking behavior, there are several parameters which can be edited in order to change how the flock looks
 here is a short key: 
-*********
+************************************
 In the Bird file: (These line numbers may need to be edited)
 
-line 28: convergence - this float controls the tendency towards the center, increases to tend more towards the center.
-line 53: collision_mult - this float controls the birds tendency to avoid each other. Increase to make them dislike each other more..
-line 86: align_correct - this controls the bird's tendency to line up their velocities. Increase this to make them more orderly.
-line 94: dest_correct - controls their tendency towards a random point.
-line 155: limit - this is the birds speed. Higher is faster.
-********
+convergence - this float controls the tendency towards the center, increases to tend more towards the center.
+collision_mult - this float controls the birds tendency to avoid each other. Increase to make them dislike each other more..
+align_correct - this controls the bird's tendency to line up their velocities. Increase this to make them more orderly.
+dest_correct - controls their tendency towards a random point.
+limit - this is the birds speed. Higher is faster.
+***********************************
 In the birdflock file:
-line 24: controls the number of birds in the flock. Be careful with too many birds it doesn't seem to work well.
-line 30: controls the screen size but note that the math was done assuming a screen size of 1000x1000.
+Flock flock = new Flock(i,flocklist,motion_values); i controls the number of birds in the flock. Don't get crazy.
+
 
 
 
@@ -44,7 +47,13 @@ take "size(1000,1000)" out of the setup function, and uncomment the settings fun
 ***********************************
 
 Acknowledgements and Citations:
-Images taken from www.aerialwallpapers.tumblr.com
+
+*******Image Sources***************
+Background images taken from www.aerialwallpapers.tumblr.com
+***********************************
+**Sound Sources********************
 Crow soundfile taken from alfdroid@freesound.org. http://freesound.org/people/alfdroid/sounds/265264/
+***********************************
+Thanks to Bryan Socha for mathing it up with me.
 Shout out to Daniel DJ MOOSEBUMP Vuong for the intro/pause song! 
 (Some) of the math is explained in the PDFs. May add more if I get bored.
