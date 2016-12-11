@@ -62,8 +62,10 @@ Integer image_int=0;
 // creates buttons
 ButtonRect mute;
 ButtonRect controls;
+ButtonRect credits;
 boolean rectPressed = false;
 boolean controlsPressed = false;
+boolean creditsPressed = false;
 
 /*motion_values is a list of integers that keeps track of which key is pressed and since it is associated with the flock, the flock 'knows' 
 which key is toggled. 
@@ -111,10 +113,10 @@ void setup()
     size(1000,1000);
     background(150);
     
-    mute = new ButtonRect(850, 900, 80, 60, color(110), color(255));
+    mute = new ButtonRect(880, 945, 20, 20, color(110), color(255));
     
-    controls = new ButtonRect(400,500,200,80,color(110),color(255));
-    
+    controls = new ButtonRect(100,300,200,80,color(110),color(255));
+    credits = new ButtonRect(650,300,200,80,color(110),color(255));
     //loads in the sounds
     minim_crows = new Minim(this);
     // use crows.wav if you have the improved soundfile, crows.mp3 if you have the smaller one
@@ -168,13 +170,22 @@ void draw()
       
     if (controlsPressed && start_button == 0)
       {
-        text(" '1' = Start/Stop ", 100,740);
-        text(" '2' = Toggle thunderstorm ", 100,760);
-        text(" '3' = Toggle color shift " , 100,780);
-        text(" '4' = Drum scatter/Press again to reform ",100,800);
-        text(" '5' = Toggle line formation ", 100,820);
-        text(" 'q' = Toggle frenzy behavior ", 100,840);
+        fill(#000000);
+        text(" '1' = Start/Stop ", 100,430);
+        text(" '2' = Toggle thunderstorm ", 100,450);
+        text(" '3' = Toggle color shift " , 100,470);
+        text(" '4' = Toggle scatter on/off ",100,490);
+        text(" '5' = Toggle line formation ", 100,510);
+        text(" 'q' = Toggle frenzy behavior ", 100,530);
              
+      }
+    if (creditsPressed && start_button == 0)
+      {
+        fill(#000000);
+        text("Math by Alex Sabol and Bryan Socha",600,430);
+        text("Start menu song by Daniel Vuong",600,450);
+        text("Background images from: ", 600,470); 
+        text("http://aerialwallpapers.tumblr.com",600,490);
       }  
     for (Radio r : radioButtons) 
       {
@@ -184,6 +195,8 @@ void draw()
       {
         controls.update(mouseX, mouseY);
         controls.display();
+        credits.update(mouseX,mouseY);
+        credits.display();
         for(int i =0; i <5; i++)
           {
             if(radioButtons[i].isChecked == true)
@@ -263,7 +276,8 @@ void draw()
       {
         textSize(25);
         fill(#B70D0D);
-        text("Controls", 450,550); 
+        text("Controls", 150,350);
+        text("Credits", 700,350);
       }
     mute.update(mouseX, mouseY);
     mute.display();
@@ -321,9 +335,13 @@ void mousePressed()
     }
   }
   if (controls.isPressed()) 
-  {
-    controlsPressed = !controlsPressed;
-  }  
+    {
+      controlsPressed = !controlsPressed;
+    }
+  if (credits.isPressed())
+    {
+      creditsPressed = !creditsPressed;  
+    }  
   for (Radio r : radioButtons) 
   {
     r.isPressed(mouseX, mouseY);
