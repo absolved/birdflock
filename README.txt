@@ -54,6 +54,16 @@ Background images taken from www.aerialwallpapers.tumblr.com
 ***********************************
 **Sound Sources********************
 Crow soundfile taken from alfdroid@freesound.org. http://freesound.org/people/alfdroid/sounds/265264/
+Fiddle soundfile taken from dobroide@freesound.org https://www.freesound.org/people/dobroide/sounds/11471/
+Deep Horn soundfile taken from reznik_Krkovicka@freesound.org https://www.freesound.org/people/reznik_Krkovicka/sounds/320789/
+Bell soundfile taken from joedeshon@freesound.org https://www.freesound.org/people/joedeshon/sounds/78506/
+Thunder2 soundfile taken from hantorio@freesound.org https://www.freesound.org/people/hantorio/sounds/121945/
+High winds soundfile taken from chipfork@freesound.org https://www.freesound.org/people/chipfork/sounds/51724/
+C piano scale soundfile taken from Connum@freesound.org https://www.freesound.org/people/Connum/sounds/12692/
+Piano discord soundfile taken from Aiwha@freesound.org https://www.freesound.org/people/Aiwha/sounds/196102/
+Clap soundfile taken from kendallbear@freesound.org https://www.freesound.org/people/kendallbear/sounds/147597/
+Whistle up soundfile taken from joedeshon@freesound.org https://www.freesound.org/people/joedeshon/sounds/79677/
+Whistle down soundfile taken from joedeshon@freesound.org https://www.freesound.org/people/joedeshon/sounds/79671/
 ***********************************
 Thanks to Bryan Socha for mathing it up with me.
 Shout out to Daniel DJ MOOSEBUMP Vuong for the intro/pause song! 
