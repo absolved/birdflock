@@ -6,21 +6,23 @@ class Flock
     int size;
     ArrayList<Bird> flocklist;
     ArrayList<Integer> motion_values;
+    ArrayList<Vector> destinations;
     
     Flock() 
       {
         int size = 0;
         ArrayList<Bird> flocklist = new ArrayList<Bird>();
         ArrayList<Integer> motion_values = new ArrayList <Integer>();
+        ArrayList<Vector> destinations = new ArrayList <Vector>();
       }
       
-    Flock(int _size, ArrayList<Bird> _flocklist, ArrayList<Integer> _motion_values)
+    Flock(int _size, ArrayList<Bird> _flocklist, ArrayList<Integer> _motion_values,ArrayList<Vector> _destinations)
     
       {
         size = _size;
         flocklist = _flocklist;
         motion_values = _motion_values;
-        
+        destinations = _destinations;  
         
         // initializes the flock
         ArrayList<Integer> color_vector= new ArrayList<Integer>();
@@ -30,11 +32,11 @@ class Flock
         for (int i=0; i<size; i++) 
           {
             Vector vel = new Vector(random(-.1,.1),random(-.1,.1));
-            Vector pos = new Vector(random(500),random(500));
+            Vector pos = new Vector(random(1000),random(1000));
             Vector accel = new Vector(0,0);
             float mass = 1;            
             flocklist.add(new Bird(pos,vel,accel,mass,color_vector));
-            
+            destinations.add(pos);
             
           }  
           
@@ -57,20 +59,62 @@ class Flock
         return center;
       }
     
+    //changes the destination of the flock, they will attempt to go to points along the boundary
+    void changeDestinations()
+      {
+        
+        for (Vector dest : destinations)
+          {            
+            float x=random(2*3.1415);          
+            dest.x=500*cos(x)+500;
+            dest.y=500*sin(x)+500;
+            if(motion_values.get(5) == 1)  
+            
+              {
+                float temp = int(random(4));            
+                if (temp == 0)
+                  {
+                    dest.x=0;
+                    dest.y=random(1000);
+                  }
+                else if (temp == 1)
+                  {
+                    dest.x=random(1000);
+                    dest.y=0;
+                  }
+                else if (temp == 2)
+                  {
+                    dest.x=1000;
+                    dest.y=random(1000);
+                  }
+                else
+                  {
+                    dest.x=random(1000);
+                    dest.y=1000;
+                  }                           
+              }
+           }              
+      }  
+        
+    
     void moveFlock() 
     
-      {
-        //this vector will be a random point on the canvas that the birds attempt to move to at each time step
+      {        
+        int flock_time = second();
         
-        
-     // float x = millis();
-        
+        if (motion_values.get(5) != 1)
+          {
+            changeDestinations();
+          }
+        else if (flock_time % 2 == 0)
+          {
+            changeDestinations();  
+          }  
         int bird_counter = 0;
+        
         for (Bird bird : flocklist)
         
-        {
-          float x=random(0,2*3.1415);          
-          Vector destiny = new Vector (500*cos(x)+500,500*sin(x)+500);            
+        {                      
           //v1 is the displacement for the center convergence 
           Vector v1 = new Vector(0,0);
           //v2 is the displacement for the collision detection
@@ -81,15 +125,19 @@ class Flock
           Vector v4 = new Vector(0,0);
           //v5 is the vector for the line formation motion
           Vector v5 = new Vector(0,0);
+          //v6 is the vector for non convergent flocking motion
+          Vector v6 = new Vector(0,0);
+          //this will be the sum of all rule displacement vectors 
           Vector totalcorrection = new Vector(0,0);
           
-          // this sounds stops the flocking behavior hotkey is '2'
-          if (motion_values.get(1) != 1)
+          // this sounds starts the storm behavior. right now it is set up to take priority over all behavior
+          if (motion_values.get(1) != 1 && motion_values.get(5) != 1)
             {
               
+              // if it is the first bird in the list, and line behavior is on, converge towards destiny about a circle
               if ( bird == flocklist.get(0) && motion_values.get(4) == 1)
                     {
-                      v4 = bird.destination(bird,destiny);
+                      v4 = bird.destination(bird,destinations.get(bird_counter));
                       v4 = v4.scalarmult(1000,v4);
                     }
               if (motion_values.get(4) != 1)
@@ -97,7 +145,7 @@ class Flock
                   v1 = bird.center(bird,flocklist);
                   v2 = bird.collide(bird,flocklist);
                   v3 = bird.align(bird,flocklist);
-                  v4 = bird.destination(bird,destiny);
+                  v4 = bird.destination(bird,destinations.get(bird_counter));
                   if (motion_values.get(3) == 1)
                     {
                       v1 = v1.scalarmult(-1000,v1);
@@ -118,19 +166,20 @@ class Flock
                 
    
             }
-          // non-flocking behavior; still need to figure out how to get the triangles to work in this case..  
+            
+          // heavy winds 
           if (motion_values.get(1) == 1)
             {
-            //  v4 = bird.destination(bird,destiny);
+            
               int coinflip= int(random(0,2));
               float destmult=0;
               if (coinflip == 0)
                 {
-                  destmult = .1;
+                  destmult = 10;
                 }
               else
                 {
-                  destmult=-.1;  
+                  destmult=-10;  
                 }  
               v4=v4.addition(v4,bird.vel.subtraction(bird.vel,getFlockCenter()));
               v4 = v4.scalarmult(destmult,v4);
@@ -173,16 +222,19 @@ class Flock
              
                 }
             }
-          // rules for drum; toggle a scatter effect on and off
+          
+          //rules for frenzied behavior
+          if (motion_values.get(5) == 1)  
+            {                           
+              v6 = bird.destination(bird,destinations.get(bird_counter));
+              v6 = v6.scalarmult(10,v6);
+              
+            }  
           
         
         
   
-       /*    rules for bass drop
-          if (motion_values.get(3) == 1)
-            {
-              
-            }  */
+     
             
             
             
@@ -191,6 +243,7 @@ class Flock
           totalcorrection = totalcorrection.addition(totalcorrection,v3);
           totalcorrection = totalcorrection.addition(totalcorrection,v4);
           totalcorrection = totalcorrection.addition(totalcorrection,v5);
+          totalcorrection = totalcorrection.addition(totalcorrection,v6);
        
           // this factor smooths out the movement          
           totalcorrection = totalcorrection.scalarmult(.0002,totalcorrection);

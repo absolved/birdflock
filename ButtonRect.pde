@@ -19,6 +19,8 @@ class ButtonRect extends Button {
   }
   
   void drawButton() {
+    stroke(0);
     rect(x, y, w, h);
+    noStroke();
   }
 }

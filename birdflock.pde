@@ -2,10 +2,11 @@
 /******
 Hotkeys
 '1' - Start/Stop
-'2' - Lightning Strike : toggles the flocking behavior on/off
+'2' - Lightning Strike : toggles high winds on and off!
 '3' - Color Gradient : toggle the color gradient. If you like a color press 3 again to stay that color!
 '4' - Drum Beat : scatters the flock, has them come back after around 5 seconds
-'5' Line formation - toggle the birds traveling in a line together
+'5' - Line formation - toggle the birds traveling in a line together
+'q' - 'Frenzied behavior' - still need to figure a lot out here...
 *******/
 
 //sound imports
@@ -17,21 +18,30 @@ Minim minim_startmusic;
 Minim minim_drum;
 Minim minim_clap;
 Minim minim_thunder;
-Minim minim_peacock;
+Minim minim_thunder2;
+Minim minim_highwinds;
+Minim minim_desk_bell;
 Minim minim_pianoscale;
 Minim minim_pianodiscord;
 Minim minim_whistleup;
 Minim minim_whistledown;
+Minim minim_deep_horn;
+Minim minim_fiddle;
 AudioPlayer crows;
 AudioPlayer startmusic;
 AudioPlayer drum;
 AudioPlayer clap;
 AudioPlayer thunder;
-AudioPlayer peacock;
+AudioPlayer thunder2;
+AudioPlayer highwinds;
+AudioPlayer desk_bell;
 AudioPlayer pianoscale;
 AudioPlayer pianodiscord;
 AudioPlayer whistleup;
 AudioPlayer whistledown;
+AudioPlayer deep_horn;
+AudioPlayer fiddle;
+
 
 // This number will be used to keep the drum active for a few seconds, then have flocking behavior return to normal
 float drum_time;
@@ -51,19 +61,23 @@ Integer image_int=0;
 
 // creates buttons
 ButtonRect mute;
+ButtonRect controls;
 boolean rectPressed = false;
+boolean controlsPressed = false;
 
 /*motion_values is a list of integers that keeps track of which key is pressed and since it is associated with the flock, the flock 'knows' 
 which key is toggled. 
 */
 ArrayList<Integer> motion_values = new ArrayList<Integer>();
+// destinations will be used to control nonflocking behavior
+ArrayList<Vector> destinations = new ArrayList<Vector>();
 Radio[] radioButtons = new Radio[5];
 
 int start_button = 0;
 ArrayList<Bird> flocklist = new ArrayList<Bird>();
 
 //this controls the size of the flock. Be careful with large numbers of birds! 
-Flock flock = new Flock(50,flocklist,motion_values);
+Flock flock = new Flock(100,flocklist,motion_values,destinations);
 
 //Initializes an experimental hawk
 Vector a = new Vector (1,1);
@@ -97,8 +111,10 @@ void setup()
     size(1000,1000);
     background(150);
     
-    mute = new ButtonRect(850, 900, 80, 60, color(110), color(200));
-
+    mute = new ButtonRect(850, 900, 80, 60, color(110), color(255));
+    
+    controls = new ButtonRect(400,500,200,80,color(110),color(255));
+    
     //loads in the sounds
     minim_crows = new Minim(this);
     // use crows.wav if you have the improved soundfile, crows.mp3 if you have the smaller one
@@ -112,8 +128,12 @@ void setup()
     clap = minim_clap.loadFile("clap.wav");
     minim_thunder = new Minim(this);
     thunder = minim_thunder.loadFile("thunder.mp3");
-    minim_peacock = new Minim(this);
-    peacock = minim_peacock.loadFile("peacock.wav");
+    minim_thunder2 = new Minim(this);
+    thunder2 = minim_thunder2.loadFile("thunder2.wav");
+    minim_highwinds = new Minim(this);
+    highwinds = minim_highwinds.loadFile("high_winds.mp3");
+    minim_desk_bell = new Minim(this);
+    desk_bell = minim_desk_bell.loadFile("desk_bell.wav");
     minim_pianoscale = new Minim(this);     
     pianoscale = minim_pianoscale.loadFile("C_pianoscale.wav");
     minim_pianodiscord = new Minim(this);
@@ -122,6 +142,10 @@ void setup()
     whistleup = minim_whistleup.loadFile("slide_whistleup.wav");
     minim_whistledown = new Minim(this);
     whistledown= minim_whistledown.loadFile("slide_whistledown.wav");
+    minim_deep_horn = new Minim(this);
+    deep_horn = minim_whistledown.loadFile("deep_horn.mp3");
+    minim_fiddle = new Minim(this);
+    fiddle = minim_fiddle.loadFile("fiddle.mp3");
 
     // creates the buttons for the background menu 
     for (int i = 0; i < radioButtons.length; i++) 
@@ -140,14 +164,26 @@ void draw()
     
     fill(#E413F0);
     textSize(16);    
-    text("Island            Delta           Desert            Ice          Mountains", 275, 900);    
+    text("Island            Delta           Desert            Ice          Mountains", 275, 900);
+      
+    if (controlsPressed && start_button == 0)
+      {
+        text(" '1' = Start/Stop ", 100,740);
+        text(" '2' = Toggle thunderstorm ", 100,760);
+        text(" '3' = Toggle color shift " , 100,780);
+        text(" '4' = Drum scatter/Press again to reform ",100,800);
+        text(" '5' = Toggle line formation ", 100,820);
+        text(" 'q' = Toggle frenzy behavior ", 100,840);
+             
+      }  
     for (Radio r : radioButtons) 
       {
         r.display();
       }      
     if(start_button == 0)
       {
-      
+        controls.update(mouseX, mouseY);
+        controls.display();
         for(int i =0; i <5; i++)
           {
             if(radioButtons[i].isChecked == true)
@@ -160,6 +196,7 @@ void draw()
       {
         for(int i =0; i <5; i++)
           {
+            
             if(radioButtons[i].isChecked == true)
               {
                 image_int = i+1;
@@ -206,12 +243,33 @@ void draw()
             }
           
         }
+      if (motion_values.get(1) == 1)
+        {
+          if (highwinds.position() == highwinds.length())
+          {
+            highwinds.rewind();
+            highwinds.play();
+          }          
+          if (highwinds.position() % 6100 <= 25)
+            {
+              fill(#E3FFFD);
+              rect(0, 0, width, height);
+              thunder2.play();
+              thunder2.rewind();
+            }  
+          }  
     }
+    if (start_button == 0)
+      {
+        textSize(25);
+        fill(#B70D0D);
+        text("Controls", 450,550); 
+      }
     mute.update(mouseX, mouseY);
     mute.display();
     fill(#B70D0D);
     textSize(25);
-    text("Mute", 855, 885);
+    text("Mute", 860, 940);
     fill(255);
     if (drumPressed)
     {
@@ -236,11 +294,14 @@ void mousePressed()
       drum.mute();
       clap.mute();
       thunder.mute();
-      peacock.mute();
+      desk_bell.mute();
       whistleup.mute();
       whistledown.mute();
       pianoscale.mute();
       pianodiscord.mute();
+      deep_horn.mute();
+      fiddle.mute();
+      thunder2.mute();
     }
     else
     {
@@ -248,14 +309,21 @@ void mousePressed()
       startmusic.unmute();
       drum.unmute();
       thunder.unmute();
-      peacock.unmute();
+      desk_bell.unmute();
       clap.unmute();
       whistleup.unmute();
       whistledown.unmute();
       pianoscale.unmute();
       pianodiscord.unmute();
+      deep_horn.unmute();
+      fiddle.unmute();
+      thunder2.unmute();
     }
   }
+  if (controls.isPressed()) 
+  {
+    controlsPressed = !controlsPressed;
+  }  
   for (Radio r : radioButtons) 
   {
     r.isPressed(mouseX, mouseY);
@@ -285,23 +353,27 @@ void keyReleased()
         flock.motion_values.set(0, 0);      
       }
     }
-  //this key toggles the flocking behavior on and off  
+  //this key toggles a thunderstorm on and off 
   if (key == '2')
     {
       pianoscale.pause();
       pianoscale.rewind();
       if (flock.motion_values.get(1) == 0)
       {
+        
         flock.motion_values.set(1, 1);
         thunder.play();
-        peacock.pause();
-        peacock.rewind();
+        highwinds.play();          
+        desk_bell.pause();
+        desk_bell.rewind();
         fill(#E3FFFD);
-        rect(0, 0, width, height);
+        rect(0, 0, width, height);        
       }
       else
       {
-        peacock.play();
+        highwinds.pause();
+        highwinds.rewind();
+        desk_bell.play();        
         flock.motion_values.set(1, 0);
         thunder.pause();
         thunder.rewind();
@@ -346,7 +418,7 @@ void keyReleased()
         }
     }
   
-  // this key will cause the flock to form a line   
+  // this key will cause the flock to form a line, like a snake   
   if (key == '5')
     {
       if (flock.motion_values.get(4) == 0)
@@ -362,6 +434,24 @@ void keyReleased()
         whistleup.pause();
         whistleup.rewind();
         flock.motion_values.set(4, 0);      
+      }
+    }
+  // this will turn on the non flocking behavior  
+  if (key == 'q')
+    {
+      if (flock.motion_values.get(5) == 0)
+      {
+        flock.motion_values.set(5, 1);
+        deep_horn.play();
+        fiddle.pause();
+        fiddle.rewind();
+      }
+      else
+      { 
+        fiddle.play();
+        deep_horn.pause();
+        deep_horn.rewind();
+        flock.motion_values.set(5, 0);      
       }
     }  
 
