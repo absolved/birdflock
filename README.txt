@@ -11,10 +11,11 @@ Application version coming soon. Making changes so frequently that I don't like 
 This program simulates flocking behavior using processing.
 First, select an environment of choice using the radio buttons.
 Press '1' to Start and stop the animation.
-Press '2' to toggle the flocking behavior on and off.
+Press '2' to toggle a thunderstorm on and off
 Press '3' to toggle the birds changing colors pseudorandomly along a gradient.
-Press '4' to toggle a scattering effect that lasts for five seconds.
+Press '4' to toggle a scattering effect that lasts for five seconds. Press again to toggle off.
 Press '5' to toggle the line formation of the flock, like a train.
+Press 'q' to toggle on/off frenzied motion 
 
 -The drum('4') is a little bit buggy, but it looks pretty cool so we'll call it a feature.
 
