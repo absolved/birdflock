@@ -131,7 +131,7 @@ class Flock
           Vector totalcorrection = new Vector(0,0);
           
           // this sounds starts the storm behavior. right now it is set up to take priority over all behavior
-          if (motion_values.get(1) != 1 && motion_values.get(5) != 1)
+          if (motion_values.get(1) != 1)
             {
               
               // if it is the first bird in the list, and line behavior is on, converge towards destiny about a circle

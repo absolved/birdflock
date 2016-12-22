@@ -27,6 +27,10 @@ class Vector
         float dist = sqrt(pow(a.x-b.x,2)+pow(a.y-b.y,2)); 
         return dist;  
       }
+    float dot_product(Vector b)
+      {
+        return x*b.x+y*b.y;   
+      }  
     // calculates the Euclidean norm, or magnitude of a vector
     float magnitude (Vector a)
       {
@@ -39,4 +43,4 @@ class Vector
         return b;
       }  
   
-    }
+  }

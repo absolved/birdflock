@@ -48,6 +48,7 @@ float drum_time;
 boolean drumPressed=false;
 
 //creates the image objects for the backgrounds.
+PImage testmap;
 PImage islands;
 PImage delta;
 PImage desert;
@@ -79,16 +80,18 @@ int start_button = 0;
 ArrayList<Bird> flocklist = new ArrayList<Bird>();
 
 //this controls the size of the flock. Be careful with large numbers of birds! 
-Flock flock = new Flock(100,flocklist,motion_values,destinations);
+Flock flock = new Flock(200,flocklist,motion_values,destinations);
 
 //Initializes an experimental hawk
 Vector a = new Vector (1,1);
 Vector b = new Vector (0,0);
 Hawk hawk = new Hawk(a,b,flock.flocklist,a);
-
+Vector mapcenter = new Vector(0,0);
 void setup()
 
   {
+    
+    testmap = loadImage("testmap.jpg");     
     drum_time=millis();
     //loads in the background images, and adds them to backgrounds list
     islands = loadImage("archipelago.jpg");
@@ -111,8 +114,7 @@ void setup()
     
     // use the settings function if size doesnt work here
     size(1000,1000);
-    background(150);
-    
+    background(150);   
     mute = new ButtonRect(880, 945, 20, 20, color(110), color(255));
     
     controls = new ButtonRect(100,300,200,80,color(110),color(255));
@@ -159,24 +161,34 @@ void setup()
   }
 
 void draw()
-  {      
+  {  
+ /*  This bit of code is an experiment in trying to get the birds to move around a large map. It's very laggy though.
+    Need to figure out a different way of doing the image so that I only have to load the image once.
+   mapcenter = flock.getFlockCenter();
+ mapcenter = mapcenter.scalarmult(-1,mapcenter);  
+  pushMatrix();
+  translate(mapcenter.x,mapcenter.y);
+  image(testmap,0,0);    
+  popMatrix();  */
     
-    //sets the background based on which radio button is pressed
+    
     background(backgrounds.get(image_int));
+    //sets the background based on which radio button is pressed
     
-    fill(#E413F0);
+    fill(#E413F0);    
     textSize(16);    
     text("Island            Delta           Desert            Ice          Mountains", 275, 900);
       
     if (controlsPressed && start_button == 0)
       {
         fill(#000000);
-        text(" '1' = Start/Stop ", 100,430);
-        text(" '2' = Toggle thunderstorm ", 100,450);
-        text(" '3' = Toggle color shift " , 100,470);
-        text(" '4' = Toggle scatter on/off ",100,490);
-        text(" '5' = Toggle line formation ", 100,510);
-        text(" 'q' = Toggle frenzy behavior ", 100,530);
+        text("Pick a map using the mouse, then",100,430);
+        text(" '1' = Start/Stop ", 100,450);
+        text(" '2' = Toggle thunderstorm ", 100,470);
+        text(" '3' = Toggle color shift " , 100,490);
+        text(" '4' = Toggle scatter on/off ",100,510);
+        text(" '5' = Toggle line formation ", 100,530);
+        text(" 'q' = Toggle frenzy behavior ", 100,550);
              
       }
     if (creditsPressed && start_button == 0)
@@ -223,10 +235,10 @@ void draw()
                 bird.display();         
               }     
               
-          //hawk.display();
+         // hawk.display();
           //hawk.chaseCenter();
-          //hawk.chaseTarget();
-          //hawk.scatterFlock();
+         //hawk.chaseTarget();
+        // hawk.scatterFlock();
           
           if (flock.motion_values.get(0) == 1)
             {

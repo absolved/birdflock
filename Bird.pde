@@ -21,7 +21,8 @@ class Bird
         accel = _accel;
         mass = _mass;
         color_vector = _color_vector; 
-      }
+      }    
+    
     
     // this creates a displacement vector, which will be added to each birds velocity vector in order to move it towards the perceived center of the flock   
     Vector center(Bird bird, ArrayList <Bird> flocklist) 
@@ -155,7 +156,7 @@ class Bird
     
     void limitvel()
       {
-        float limit = 4;
+        float limit = 5;
         float norm = sqrt(pow(this.vel.x,2)+pow(this.vel.y,2)); 
         if (norm > limit)
           {
@@ -168,19 +169,25 @@ class Bird
           {
             fill(color_vector.get(0),color_vector.get(1),color_vector.get(2));
             stroke(0);
+            
+            
             ellipse(pos.x,pos.y,25,25);
+            
             Vector triheadvect = this.tri_head();          
             Vector trifoot1vect = this.tri_foot1(triheadvect);
             Vector trifoot2vect = this.tri_foot2(triheadvect);            
             fill(0);
+           
+           
+                       
             float area_check = tri_area(triheadvect,trifoot1vect,trifoot2vect); 
             if (area_check < 200 && area_check > 140)  
               {
                 
                 triangle(triheadvect.x,triheadvect.y,trifoot1vect.x,trifoot1vect.y,trifoot2vect.x,trifoot2vect.y);                                  
                 
-              }  
-            //line(pos.x,pos.y,accel.x,accel.y);
+              }   
+            
             
           }
       
