@@ -122,7 +122,7 @@ void setup()
     //loads in the sounds
     minim_crows = new Minim(this);
     // use crows.wav if you have the improved soundfile, crows.mp3 if you have the smaller one
-    crows = minim_crows.loadFile("crows.wav");
+    crows = minim_crows.loadFile("crows.mp3");
     minim_startmusic = new Minim(this); 
     startmusic = minim_startmusic.loadFile("musicloop.mp3");
     startmusic.play();
