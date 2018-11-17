@@ -21,8 +21,7 @@ class Bird
         accel = _accel;
         mass = _mass;
         color_vector = _color_vector; 
-      }    
-    
+      }
     
     // this creates a displacement vector, which will be added to each birds velocity vector in order to move it towards the perceived center of the flock   
     Vector center(Bird bird, ArrayList <Bird> flocklist) 
@@ -102,13 +101,15 @@ class Bird
     Vector tri_head()
       {
         //this amounts to solving some quadratic equations. multiplying the velocity by a constant seems to smooth out the movement, will have to figure this out.
-        float m = (1500*vel.x- pos.y)/(1500*vel.y-pos.x);        
-        float a = 1 + (m*m);      
-        float b = -2*pos.x*(1+m*m);         
-        float c = (pos.x*pos.x)*a-100;        
-        float tri_x = (-b + sqrt((b*b)-4*a*c))/(2*a);
-        float tri_y = m*(tri_x-pos.x)+pos.y;
-        return new Vector (tri_x,tri_y); 
+        //float m = (1500*vel.x- pos.y)/(1500*vel.y-pos.x);        
+        //float a = 1 + (m*m);      
+        //float b = -2*pos.x*(1+m*m);         
+        //float c = (pos.x*pos.x)*a-100;        
+        //float tri_x = (-b + sqrt((b*b)-4*a*c))/(2*a);
+        //float tri_y = m*(tri_x-pos.x)+pos.y;
+        //return new Vector (tri_x,tri_y);
+        //float magnitude = 25 / sqrt((vel.x*vel.x)+(vel.y*vel.y));
+        //return new Vector (magnitude*vel.x+pos.x,magnitude*vel.y+pos.y);
       }
       
       
@@ -156,7 +157,7 @@ class Bird
     
     void limitvel()
       {
-        float limit = 5;
+        float limit = 4;
         float norm = sqrt(pow(this.vel.x,2)+pow(this.vel.y,2)); 
         if (norm > limit)
           {
@@ -169,24 +170,18 @@ class Bird
           {
             fill(color_vector.get(0),color_vector.get(1),color_vector.get(2));
             stroke(0);
-            
-            
             ellipse(pos.x,pos.y,25,25);
-            
             Vector triheadvect = this.tri_head();          
             Vector trifoot1vect = this.tri_foot1(triheadvect);
             Vector trifoot2vect = this.tri_foot2(triheadvect);            
             fill(0);
-           
-           
-                       
             float area_check = tri_area(triheadvect,trifoot1vect,trifoot2vect); 
             if (area_check < 200 && area_check > 140)  
               {
                 
                 triangle(triheadvect.x,triheadvect.y,trifoot1vect.x,trifoot1vect.y,trifoot2vect.x,trifoot2vect.y);                                  
                 
-              }   
+              }  
             
             
           }
