@@ -108,8 +108,8 @@ class Bird
         //float tri_x = (-b + sqrt((b*b)-4*a*c))/(2*a);
         //float tri_y = m*(tri_x-pos.x)+pos.y;
         //return new Vector (tri_x,tri_y);
-        //float magnitude = 25 / sqrt((vel.x*vel.x)+(vel.y*vel.y));
-        //return new Vector (magnitude*vel.x+pos.x,magnitude*vel.y+pos.y);
+        float magnitude = 10 / sqrt((vel.x*vel.x)+(vel.y*vel.y));
+        return new Vector (magnitude*vel.x+pos.x,magnitude*vel.y+pos.y);
       }
       
       
@@ -176,7 +176,7 @@ class Bird
             Vector trifoot2vect = this.tri_foot2(triheadvect);            
             fill(0);
             float area_check = tri_area(triheadvect,trifoot1vect,trifoot2vect); 
-            if (area_check < 200 && area_check > 140)  
+            if (area_check < 250 && area_check > 140)  
               {
                 
                 triangle(triheadvect.x,triheadvect.y,trifoot1vect.x,trifoot1vect.y,trifoot2vect.x,trifoot2vect.y);                                  
